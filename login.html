@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <center>
+        <h1>ChillZone</h1>
+        <br>
+        <div>
+            <h2>Log In</h2>
+            <br>
+            <input type="text" placeholder="Enter Your Username" id="Username">
+            <input type="text" placeholder="Enter Your Password" id="Password">
+            <br><br>
+            <button id="submit">Submit Credentials</button>
+            <br><br>
+        </div>
+        <br>
+        <h4>Don't have an account? <a href="index.html">Sign up for ChillZone</a></h4>
+    </center>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "firebase/app";
+        import { get, child, ref, getDatabase } from firebase.database();
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBp7qDWIWurLyz661suJdOnFj-LVR8vWW4",
+            authDomain: "practice-app-8cfdc.firebaseapp.com",
+            databaseURL: "https://practice-app-8cfdc-default-rtdb.firebaseio.com",
+            projectId: "practice-app-8cfdc",
+            storageBucket: "practice-app-8cfdc.appspot.com",
+            messagingSenderId: "986014958631",
+            appId: "1:986014958631:web:3d29723a00d8708f09fa02"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const dbRef = ref(getDatabase());
+
+        document.getElementById("submit").onclick = function () {
+            var username = document.getElementById("Username").value;
+            var password = document.getElementById("Password").value;
+            get(child(dbRef, `/${username}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    localStorage.setItem("Username", username);
+                    localStorage.setItem("Password", password);
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    </script>
+</body>
+
+</html>

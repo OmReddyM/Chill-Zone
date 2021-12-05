@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
+</head>
+
+<body>
+    <button><a href="mailto:emailid@gmail.com?subject=Your%20Subject&body=Your%20Body" target="_blank">Send
+            Email</a></button>
+    <button class="logOut"><i class="fa fa-sign-out"></i> Log Out</button>
+    <br><br>
+    <div class="Friends">
+        <br>
+        <h2>Your Friends</h2>
+        <div class="friendsDisplay"></div>
+        <br>
+        <h2>Add A Friend</h2>
+        <br>
+        <input type="text" placeholder="Enter Someone's Username" id="newFriend">
+        <br><br>
+        <button onclick="addFriend()">Add Friend</button>
+    </div>
+    <center>
+        <h1>ChillZone</h1>
+        <br>
+        <div>
+            <h2>Invite By Username</h2><br>
+            <input type="text" placeholder="Enter Someone's Username" id="inviteeUsername">
+            <br><br>
+            <button onclick="InviteByUsername()">Submit Invitee's Username</button><br><br>
+        </div>
+        <br><br>
+        <div>
+            <h2>Invite A Friend</h2><br>
+            <h3>Your Friends</h3>
+            <div id="yourFriends" class="friendsDisplay">
+
+            </div>
+            <br>
+        </div>
+    </center>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getDatabase, ref, child, get } from firebase.database();
+        const dbRef = ref(getDatabase());
+        var username = localStorage.getItem("Username");
+        var friends = [];
+
+        function checkInvites() {
+            firebase.database().ref(`/${username}/Invites`).on('value', function (snapshot) {
+                snapshot.forEach(function (childSnapshot) {
+                    Inviter = childSnapshot.key;
+                    childSnapshot.forEach(function () {
+                        alert(`${Inviter} has invited you to chill with them!`);
+                        var response = prompt("Will you accept?").toLowerCase();
+                        if (response == "yes") {
+                            alert("You accepted the invitation!");
+                        } else if (response == "no") {
+                            alert("You declined the invitation.");
+                        } else {
+                            alert("That's not a valid response! The invitation has been declined.");
+                        }
+                    });
+                });
+            });
+        }
+        checkInvites();
+        function checkFriendRequests() {
+            firebase.database().ref(`/${username}/Requests`).on('value', function (snapshot) {
+                snapshot.forEach(function (childSnapshot) {
+                    Requester = childSnapshot.key;
+                    childSnapshot.forEach(function () {
+                        alert(`User ${Requester} wants to be your friend!`);
+                        var response = prompt("Will you accept?").toLowerCase();
+                        if (response == "yes") {
+                            window.alert("Friend request accepted!");
+                            friends.push(Requester);
+                            firebase.database().ref(`/${username}/Friends`).push({
+                                Requester: "A friend"
+                            });
+                        } else if (response == "no") {
+                            window.alert("Request declined.");
+                        } else {
+                            alert("Invalid value! Request declined.");
+                        }
+                    });
+                });
+            });
+        }
+
+        function InviteByUsername() {
+            invitee = document.getElementById("inviteeUsername").value;
+            get(child(dbRef, `/${invitee}`).then((snapshot) => {
+                if (snapshot.exists()) {
+                    alert(`Sending Invite to ${invitee}`);
+                    firebase.database().ref(`/${invitee}/Invites`).push({
+                        username: `${username} has invited you!`
+                    });
+                } else {
+                    alert("No such user found! Please try again.")
+                }
+            }).catch((error) => {
+                console.error(error);
+            }));
+        }
+
+        function addFriend() {
+            var newFriend = document.getElementById("newFriend").value;
+            firebase.database().ref(`/${username}/Requests`).push({
+                newFriend: `Request recived from ${newFriend}`
+            });
+        }
+    </script>
+    <script src="friends.js"></script>
+</body>
+
+</html>

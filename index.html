@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
+</head>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBp7qDWIWurLyz661suJdOnFj-LVR8vWW4",
+        authDomain: "practice-app-8cfdc.firebaseapp.com",
+        databaseURL: "https://practice-app-8cfdc-default-rtdb.firebaseio.com",
+        projectId: "practice-app-8cfdc",
+        storageBucket: "practice-app-8cfdc.appspot.com",
+        messagingSenderId: "986014958631",
+        appId: "1:986014958631:web:3d29723a00d8708f09fa02"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+
+    document.getElementById("submit").onclick = function () {
+        var username = document.getElementById("Username").value;
+        var password = document.getElementById("Password").value;
+        localStorage.setItem("Username", username);
+        localStorage.setItem("Password", password);
+        firebase.database().ref("/").child(username).update({
+            Username: username, Password: password, Invites: {}, Friends: {}, Requests: {}
+        });
+        window.location = "invite.html";
+    }
+</script>
+
+<body>
+
+
+
+
+    <center>
+        <h1>ChillZone</h1>
+        <br>
+        <div>
+            <h2>Sign Up</h2>
+            <br>
+            <input class="form-control" type="text" placeholder="Select Your Username" id="Username">
+            <input class="form-control" type="text" placeholder="Select Your Password" id="Password">
+            <br><br>
+            <button type="submit" id="submit">Create Account</button>
+
+            <br><br>
+        </div>
+        <br>
+        <h4>Have an account already? <a href="login.html">Login to your account</a></h4>
+    </center>
+
+</body>
+
+</html>

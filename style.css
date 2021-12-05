@@ -1,0 +1,39 @@
+body{
+    background-color: coral;
+}
+div{
+    width: 40%;
+    border-radius: 100px;
+    background-color: skyblue;
+    border: 5px solid;
+    border-color: darkred;
+}
+button{
+    background-color: blueviolet;
+}
+button:hover{
+    background: #791ad1;
+}
+.logOut{
+    background-color: #dc143c;
+    color: burlywood;
+}
+.logOut:hover{
+    background-color: #cb032b;
+}
+.Friends{
+    float: right;
+    height: 750px;
+    width: 20%;
+    margin-right: -5%;
+    border: 0px;
+    background-image: linear-gradient(darkblue, darkviolet);
+    color: burlywood;
+    text-align: center;
+}
+.friendsDisplay{
+    margin-left: 30%;
+}
+#yourFriends{
+    margin-right: 30%;
+}
