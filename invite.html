@@ -13,8 +13,7 @@
 </head>
 
 <body>
-    <button><a href="mailto:emailid@gmail.com?subject=Your%20Subject&body=Your%20Body" target="_blank">Send
-            Email</a></button>
+
     <button class="logOut"><i class="fa fa-sign-out"></i> Log Out</button>
     <br><br>
     <div class="Friends">
@@ -26,36 +25,53 @@
         <br>
         <input type="text" placeholder="Enter Someone's Username" id="newFriend">
         <br><br>
-        <button onclick="addFriend()">Add Friend</button>
+        <button id="addFriend">Add Friend</button>
+        <br><br>
+        <button><a href="mailto:emailid@gmail.com?subject=Your%20Subject&body=Your%20Body" target="_blank">Email A
+                Friend</a></button>
     </div>
     <center>
-        <h1>ChillZone</h1>
+        <h1 class="friendDisplaced">ChillZone</h1>
         <br>
         <div>
             <h2>Invite By Username</h2><br>
             <input type="text" placeholder="Enter Someone's Username" id="inviteeUsername">
             <br><br>
-            <button onclick="InviteByUsername()">Submit Invitee's Username</button><br><br>
+            <button id="inviteUsername">Submit Invitee's Username</button><br><br>
         </div>
         <br><br>
         <div>
             <h2>Invite A Friend</h2><br>
             <h3>Your Friends</h3>
-            <div id="yourFriends" class="friendsDisplay">
-
-            </div>
+            <div class="friendsDisplay" id="displaced"></div>
             <br>
         </div>
     </center>
+    <!--<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js"></script>-->
     <script type="module">
+        //require("https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"); require("https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js");
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-        import { getDatabase, ref, child, get } from firebase.database();
-        const dbRef = ref(getDatabase());
+        import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBp7qDWIWurLyz661suJdOnFj-LVR8vWW4",
+            authDomain: "practice-app-8cfdc.firebaseapp.com",
+            databaseURL: "https://practice-app-8cfdc-default-rtdb.firebaseio.com",
+            projectId: "practice-app-8cfdc",
+            storageBucket: "practice-app-8cfdc.appspot.com",
+            messagingSenderId: "986014958631",
+            appId: "1:986014958631:web:3d29723a00d8708f09fa02"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        // const dbRef = getDatabase(app);
         var username = localStorage.getItem("Username");
         var friends = [];
 
         function checkInvites() {
-            firebase.database().ref(`/${username}/Invites`).on('value', function (snapshot) {
+            ref(`/${username}/Invites`).on('value', function (snapshot) {
                 snapshot.forEach(function (childSnapshot) {
                     Inviter = childSnapshot.key;
                     childSnapshot.forEach(function () {
@@ -63,6 +79,7 @@
                         var response = prompt("Will you accept?").toLowerCase();
                         if (response == "yes") {
                             alert("You accepted the invitation!");
+                            window.location = "chill.html";
                         } else if (response == "no") {
                             alert("You declined the invitation.");
                         } else {
@@ -72,9 +89,9 @@
                 });
             });
         }
-        checkInvites();
+
         function checkFriendRequests() {
-            firebase.database().ref(`/${username}/Requests`).on('value', function (snapshot) {
+            ref(app, `/${username}/Requests`).on('value', function (snapshot) {
                 snapshot.forEach(function (childSnapshot) {
                     Requester = childSnapshot.key;
                     childSnapshot.forEach(function () {
@@ -96,7 +113,7 @@
             });
         }
 
-        function InviteByUsername() {
+        document.getElementById("inviteUsername").onclick = function () {
             invitee = document.getElementById("inviteeUsername").value;
             get(child(dbRef, `/${invitee}`).then((snapshot) => {
                 if (snapshot.exists()) {
@@ -112,14 +129,32 @@
             }));
         }
 
-        function addFriend() {
+        document.getElementById("addFriend").onclick = function () {
             var newFriend = document.getElementById("newFriend").value;
-            firebase.database().ref(`/${username}/Requests`).push({
-                newFriend: `Request recived from ${newFriend}`
+            firebase.database().ref(`/${newFriend}/Requests`).push({
+                New_Friend: `Request recived from ${username}`
             });
         }
+
+
+
+        document.getElementsByClassName("LogOut").onclick = function () {
+            localStorage.removeItem("Username");
+            localStorage.removeItem("Password");
+            firebase.database().ref(`/Users/${username}`).remove();
+            window.location = "index.html";
+        }
+
+        setInterval(function () {
+            checkFriendRequests(); checkInvites();
+            for (let i = 0; i < friends.length; i++) {
+                let element = friends[i];
+                var friendRow = "<h3 class=" + element + ">" + element + "</h3><hr>"
+                var currentDisplay = document.getElementsByClassName("displayFriends").innerHTML;
+                document.getElementsByClassName("displayFriends").innerHTML = currentDisplay + friendRow;
+            }
+        }, 100);
     </script>
-    <script src="friends.js"></script>
 </body>
 
 </html>

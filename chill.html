@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <button class="logOut"><i class="fa fa-sign-out"></i> Log Out</button>
+    <br><br>
+    <div class="Friends">
+        <br>
+        <h2>Your Friends</h2>
+        <div class="friendsDisplay"></div>
+        <br>
+        <h2>Add A Friend</h2>
+        <br>
+        <input type="text" placeholder="Enter Someone's Username" id="newFriend">
+        <br><br>
+        <button id="addFriend">Add Friend</button>
+        <br><br>
+        <button><a href="mailto:emailid@gmail.com?subject=Your%20Subject&body=Your%20Body" target="_blank">Email A
+                Friend</a></button>
+        <br><br>
+        <div id="chillZoneChat"></div>
+        <br>
+        <input type="text" placeholder="Your Message" id="message">
+    </div>
+    <center>
+        <h1 class="friendDisplaced">ChillZone</h1>
+        <br>
+        <div id="userTabs">
+            <iframe id="yourTab" src="https://google.com"></iframe>
+        </div>
+    </center>
+</body>
+<script type="module" src="invite.html"></script>
+
+</html>
